@@ -1,14 +1,11 @@
-package br.com.guilherme.barros.CarsSystem.dto;
+package br.com.guilherme.barros.CarsSystem.dto.Veiculo;
 
 import br.com.guilherme.barros.CarsSystem.model.modelo.Modelo;
-import br.com.guilherme.barros.CarsSystem.model.veiculos.Veiculo;
 import br.com.guilherme.barros.CarsSystem.model.veiculos.carro.Carro;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -16,7 +13,7 @@ import java.util.Date;
 @Builder
 public class CarroDTO {
     private Long id;
-    private LocalDateTime timestamp_cadastro;
+    private Date timestamp_cadastro;
     private Long modelo_id;
     private Date ano;
     private String combustivel;
@@ -24,6 +21,8 @@ public class CarroDTO {
     private Integer num_portas;
     private String nome_modelo;
     private Double valor;
+    private Long marca_id;
+    private String marca_nome;
 
 
     public static CarroDTO toDTO(Carro carro) {
@@ -43,7 +42,7 @@ public class CarroDTO {
         Carro carro = new Carro(
                 carroDTO.getId(),
                 carroDTO.getTimestamp_cadastro(),
-                new Modelo(carroDTO.getModelo_id()),
+                new Modelo(carroDTO.getModelo_id(), carroDTO.getMarca_id()),
                 carroDTO.getAno(),
                 carroDTO.getCombustivel(),
                 carroDTO.getCor(),
