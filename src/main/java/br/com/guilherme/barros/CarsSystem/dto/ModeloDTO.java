@@ -2,12 +2,16 @@ package br.com.guilherme.barros.CarsSystem.dto;
 
 import br.com.guilherme.barros.CarsSystem.model.marca.Marca;
 import br.com.guilherme.barros.CarsSystem.model.modelo.Modelo;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-    public class ModeloDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ModeloDTO {
 
     private Long id;
     private Long marca_id;
@@ -26,7 +30,7 @@ import lombok.Data;
     public static Modelo toEntity(ModeloDTO modeloDTO) {
         return new Modelo(
                 modeloDTO.getId(),
-                new Marca(modeloDTO.getMarca_id()),
+                modeloDTO.getMarca_id() != null ? new Marca(modeloDTO.getMarca_id()) : null,
                 modeloDTO.getNome(),
                 modeloDTO.getValor_fipe());
     }

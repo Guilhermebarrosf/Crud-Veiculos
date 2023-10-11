@@ -5,8 +5,6 @@ import br.com.guilherme.barros.CarsSystem.dto.Veiculo.CarroDTO;
 import br.com.guilherme.barros.CarsSystem.model.veiculos.carro.Carro;
 import br.com.guilherme.barros.CarsSystem.model.veiculos.carro.CarroRegras;
 import br.com.guilherme.barros.CarsSystem.util.Constantes;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import static br.com.guilherme.barros.CarsSystem.util.UtilException.mensagemExceptionTratada;
+
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/carro")
 public class CarroController {
@@ -36,7 +37,7 @@ public class CarroController {
             return new ResponseEntity<>(Constantes.SUCESS_SAVE, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return mensagemExceptionTratada(e);
         }
     }
 
@@ -49,12 +50,13 @@ public class CarroController {
             return new ResponseEntity<>(Constantes.SUCESS_EDIT, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+            return mensagemExceptionTratada(e);
         }
     }
 
     @DeleteMapping("/{id}/excluir")
-    public ResponseEntity<String> excluir(@RequestParam Long id) {
+    public ResponseEntity<String> excluir(@PathVariable Long id) {
         try {
             Optional<Carro> carro = iCarroRepository.findById(id);
 
@@ -64,7 +66,8 @@ public class CarroController {
             return new ResponseEntity<>(Constantes.SUCESS_DELETE, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+
+            return mensagemExceptionTratada(e);
         }
     }
 
@@ -85,20 +88,7 @@ public class CarroController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            Map<String, List<CarroDTO>> errorResponse = new HashMap<>();
-            errorResponse.put(Constantes.LIST_ERROR, new ArrayList<>());
-            return ResponseEntity.internalServerError().body(errorResponse);
+            return mensagemExceptionTratada(new Exception(Constantes.LIST_ERROR));
         }
     }
 }
-//
-//    @GetMapping("/{id}/buscarPorId")
-//    public void buscar(@RequestParam Long idCarro){
-//        try{
-//            ICarroRepository.buscarPorId(idCarro);
-//        }
-//        catch (Exception e){
-//            System.out.println(e.getMessage());
-//        }
-//    }
-//}

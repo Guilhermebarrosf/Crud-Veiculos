@@ -13,15 +13,14 @@ public class Modelo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private Marca marca;
     private String nome;
     private Double valorFipe;
 
-    public Modelo(Long idModelo, Long idMarca){
+    public Modelo(Long idModelo){
         this.id = idModelo;
-        this.marca = new Marca(idMarca);
     }
-
 
 }

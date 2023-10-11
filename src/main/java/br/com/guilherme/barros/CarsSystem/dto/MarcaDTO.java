@@ -1,11 +1,15 @@
 package br.com.guilherme.barros.CarsSystem.dto;
 
 import br.com.guilherme.barros.CarsSystem.model.marca.Marca;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MarcaDTO {
 
     private Long id;

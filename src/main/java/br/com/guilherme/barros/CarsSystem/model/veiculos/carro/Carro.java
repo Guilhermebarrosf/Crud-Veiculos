@@ -6,6 +6,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.*;
 
+import java.sql.Timestamp;
+import java.time.Year;
 import java.util.Date;
 
 @Getter
@@ -15,7 +17,7 @@ public class Carro extends Veiculo {
 
     private Integer numPortas;
 
-    public Carro(Long id, Date createDateTime, Modelo modelo, Date ano, String combustivel, String cor, Integer numPortas) {
+    public Carro(Long id, Long createDateTime, Modelo modelo, Integer ano, String combustivel, String cor, Integer numPortas) {
         super(id, createDateTime, modelo, ano, combustivel, cor);
         this.numPortas = numPortas;
     }

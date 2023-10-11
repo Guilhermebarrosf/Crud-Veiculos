@@ -12,34 +12,23 @@ import java.util.Optional;
 public class CarroRegras {
 
     static IModeloRepository iModeloRepository;
-    static IMarcaRepository iMarcaRepository;
 
     @Autowired
-    public CarroRegras(IModeloRepository iModeloRepository,IMarcaRepository iMarcaRepository) {
+    public CarroRegras(IModeloRepository iModeloRepository) {
         this.iModeloRepository = iModeloRepository;
-        this.iMarcaRepository = iMarcaRepository;
     }
 
     public void beforeDatabaseAction(Carro carro) throws Exception {
-        if(carro.getNumPortas() <= Constantes.QUANTIDADE_MIN_PORTAS_CARRO){
-            throw new Exception("Quantidade Mínima de portas é 2");
+        if(carro.getNumPortas() != null && carro.getNumPortas() < Constantes.QUANTIDADE_MIN_PORTAS_CARRO){
+            throw new Exception(Constantes.ERROR_QUANTIDADE_MINIMA);
         }
 
-        if(carro.getModelo().getId() == null){
-            throw new Exception("Modelo Obrigatório");
-        }else{
+        if(carro.getModelo() != null && carro.getModelo().getId() == null){
+            throw new Exception(Constantes.ERROR_MODELO_OBRIGATORIO);
+        }else if(carro.getModelo() != null){
             Optional<Long> idModelo = iModeloRepository.isExist(carro.getModelo().getId());
             if(!idModelo.isPresent()){
-                throw new Exception("Modelo Não Registrado");
-            }
-        }
-
-        if(carro.getModelo().getMarca().getId() == null){
-            throw new Exception("Marca Obrigatória");
-        }else{
-            Optional<Long> idMarca = iMarcaRepository.isExist(carro.getModelo().getMarca().getId());
-            if(!idMarca.isPresent()){
-                throw new Exception("Marca Não Registrada");
+                throw new Exception(Constantes.ERROR_MODELO_NAO_REGISTRADO);
             }
         }
     }

@@ -4,7 +4,9 @@ import br.com.guilherme.barros.CarsSystem.model.modelo.Modelo;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.Date;
 
 @Getter
@@ -19,11 +21,11 @@ public abstract class Veiculo {
     private Long id;
 
     @Column(name = "timestamp_cadastro")
-    private Date createDateTime;
+    private Long createDateTime;
 
     @ManyToOne
     private Modelo modelo;
-    private Date ano;
+    private Integer ano;
     private String combustivel;
     private String cor;
 
