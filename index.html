@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interface de Requisição</title>
+    <script src="https://cdn.jsdelivr.net/npm/json-formatter-js@2.3.4/dist/json-formatter.umd.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/json-formatter-js@2.3.4/dist/json-formatter.min.css" rel="stylesheet">
+</head>
+<body onload="selectEndpoint()">
+<h1>Requisições REST</h1>
+
+<label for="endpoint">Selecione o endpoint:</label>
+<select id="endpoint" onchange="selectEndpoint()">
+    <option value="listarCarros">Listar Carros</option>
+    <option value="incluirCarro">Incluir Carro</option>
+    <option value="editarCarro">Editar Carro</option>
+    <option value="excluirCarro">Excluir Carro</option>
+    <option value="listarModelos">Listar Modelos</option>
+    <option value="incluirModelo">Incluir Modelo</option>
+    <option value="editarModelo">Editar Modelo</option>
+    <option value="excluirModelo">Excluir Modelo</option>
+    <option value="listarMarcas">Listar Marcas</option>
+    <option value="incluirMarca">Incluir Marca</option>
+    <option value="editarMarca">Editar Marca</option>
+    <option value="excluirMarca">Excluir Marca</option>
+</select>
+
+<div id="formDiv">
+    <!-- Este div será preenchido com o formulário correspondente ao endpoint selecionado -->
+</div>
+
+<div id="resultDiv">
+    <!-- Aqui será exibido o resultado da requisição -->
+</div>
+
+<script>
+    function selectEndpoint() {
+        var endpointSelect = document.getElementById("endpoint");
+        var selectedEndpoint = endpointSelect.value;
+        var formDiv = document.getElementById("formDiv");
+
+        // Limpa o formulário existente
+        formDiv.innerHTML = "";
+
+        // Cria um novo formulário com base no endpoint selecionado
+        switch (selectedEndpoint) {
+            case "incluirCarro":
+                formDiv.innerHTML = `
+                        <label for="carroData">JSON para inclusão:</label>
+                        <textarea id="carroData" rows="4" cols="50">
+{
+    "num_portas": 7,
+    "timestamp_cadastro": 1696539488,
+    "ano": 2015,
+    "combustivel": "FLEXXX",
+    "cor": "BEGEE",
+    "modelo_id": 2
+}
+                        </textarea>
+                        <br>
+                        <button onclick="sendRequest('http://localhost:8080/carro/incluir', 'POST', 'carroData')">Enviar Requisição</button>
+                    `;
+                break;
+            case "editarCarro":
+                formDiv.innerHTML = `
+                        <label for="carroData">JSON para edição:</label>
+                        <textarea id="carroData" rows="4" cols="50">
+{
+    "id": 1,
+    "num_portas": 7,
+    "timestamp_cadastro": 1696539488,
+    "ano": 2015,
+    "combustivel": "FLEXXX",
+    "cor": "BEGEE",
+    "modelo_id": 2
+}
+                        </textarea>
+                        <br>
+                        <button onclick="sendRequest('http://localhost:8080/carro/editar', 'PUT', 'carroData')">Enviar Requisição</button>
+                    `;
+                break;
+            case "excluirCarro":
+                formDiv.innerHTML = `
+                        <label for="carroId">ID do Carro a Excluir:</label>
+                        <input type="text" id="carroId">
+                        <br>
+                        <button onclick="sendRequest('http://localhost:8080/carro/' + document.getElementById('carroId').value + '/excluir', 'DELETE')">Enviar Requisição</button>
+                    `;
+                break;
+            case "listarModelos":
+                formDiv.innerHTML = `
+                        <button onclick="sendRequest('http://localhost:8080/modelo/listar', 'GET')">Listar Modelos</button>
+                    `;
+                break;
+            case "listarCarros":
+                formDiv.innerHTML = `
+                        <button onclick="sendRequest('http://localhost:8080/carro/listar', 'GET')">Listar Carros</button>
+                    `;
+                break;
+            case "incluirModelo":
+                formDiv.innerHTML = `
+                        <label for="modeloData">JSON para inclusão:</label>
+                        <textarea id="modeloData" rows="4" cols="50">
+{
+    "nome": "modeloAbublee",
+    "marca_id": "1",
+    "valor_fipe": 29001
+}
+                        </textarea>
+                        <br>
+                        <button onclick="sendRequest('http://localhost:8080/modelo/incluir', 'POST', 'modeloData')">Enviar Requisição</button>
+                    `;
+                break;
+            case "editarModelo":
+                formDiv.innerHTML = `
+                        <label for="modeloData">JSON para edição:</label>
+                        <textarea id="modeloData" rows="4" cols="50">
+{
+    "id": 1,
+    "nome": "modeloAbublee",
+    "marca_id": "1",
+    "valor_fipe": 29001
+}
+                        </textarea>
+                        <br>
+                        <button onclick="sendRequest('http://localhost:8080/modelo/editar', 'PUT', 'modeloData')">Enviar Requisição</button>
+                    `;
+                break;
+            case "excluirModelo":
+                formDiv.innerHTML = `
+                        <label for="modeloId">ID do Modelo a Excluir:</label>
+                        <input type="text" id="modeloId">
+                        <br>
+                        <button onclick="sendRequest('http://localhost:8080/modelo/' + document.getElementById('modeloId').value + '/excluir', 'DELETE')">Enviar Requisição</button>
+                    `;
+                break;
+            case "listarMarcas":
+                formDiv.innerHTML = `
+                        <button onclick="sendRequest('http://localhost:8080/marca/listar', 'GET')">Listar Marcas</button>
+                    `;
+                break;
+            case "incluirMarca":
+                formDiv.innerHTML = `
+                        <label for="marcaData">JSON para inclusão:</label>
+                        <textarea id="marcaData" rows="4" cols="50">
+{
+    "nome_marca": "modeloAbublee"
+}
+                        </textarea>
+                        <br>
+                        <button onclick="sendRequest('http://localhost:8080/marca/incluir', 'POST', 'marcaData')">Enviar Requisição</button>
+                    `;
+                break;
+            case "editarMarca":
+                formDiv.innerHTML = `
+                        <label for="marcaData">JSON para edição:</label>
+                        <textarea id="marcaData" rows="4" cols="50">
+{
+    "id": 1,
+    "nome_marca": "modeloAbublee"
+}
+                        </textarea>
+                        <br>
+                        <button onclick="sendRequest('http://localhost:8080/marca/editar', 'PUT', 'marcaData')">Enviar Requisição</button>
+                    `;
+                break;
+            case "excluirMarca":
+                formDiv.innerHTML = `
+                        <label for="marcaId">ID da Marca a Excluir:</label>
+                        <input type="text" id="marcaId">
+                        <br>
+                        <button onclick="sendRequest('http://localhost:8080/marca/' + document.getElementById('marcaId').value + '/excluir', 'DELETE')">Enviar Requisição</button>
+                    `;
+                break;
+        }
+    }
+
+    function sendRequest(url, method, dataElementId) {
+        var requestData = null;
+
+        if (dataElementId) {
+            var dataElement = document.getElementById(dataElementId);
+            requestData = dataElement.value;
+        }
+        fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: requestData
+        })
+            .then(response => {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json();
+                } else {
+                    return response.text();
+                }})
+            .then(data => {
+                var resultDiv = document.getElementById("resultDiv");
+                var formatter = new JSONFormatter(data, 1, {
+                    hoverPreviewEnabled: true,
+                    hoverPreviewArrayCount: 100,
+                    hoverPreviewFieldCount: 5
+                });
+                resultDiv.innerHTML = '';
+                resultDiv.appendChild(formatter.render());
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
+    }
+</script>
+</body>
+</html>
